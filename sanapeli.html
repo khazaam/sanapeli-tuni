@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sanaselain – Verbit, Substantiivit, Adjektiivit</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background-color: #f4f4f4;
+      font-family: "Poppins", sans-serif;
+    }
+
+    .container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 20px;
+      margin-bottom: 30px;
+      flex-wrap: wrap;
+    }
+
+    .card {
+      width: 150px;
+      height: 150px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 1.3rem;
+      font-weight: bold;
+      color: white;
+      border-radius: 20px;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      transition: transform 0.3s;
+      user-select: none;
+    }
+
+    .card:hover {
+      transform: scale(1.05);
+    }
+
+    .verb { background-color: #e63946; }   /* red */
+    .noun { background-color: #457b9d; }   /* blue */
+    .adj { background-color: #f4a261; }    /* orange */
+
+    #restartBtn {
+      display: none;
+      padding: 10px 25px;
+      background-color: #2a9d8f;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 1.1rem;
+      cursor: pointer;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+
+    #restartBtn:hover {
+      background-color: #21867a;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="card verb" id="verbCard">Verbi</div>
+    <div class="card noun" id="nounCard">Substantiivi</div>
+    <div class="card adj" id="adjCard">Adjektiivi</div>
+  </div>
+
+  <button id="restartBtn">Pelaa uudestaan 🔁</button>
+
+  <script>
+    const verbs = [
+  "juosta", "syödä", "nukkua", "matkustaa", "katsoa",
+  "rakentaa", "istua", "uida", "lentää", "nauraa",
+  "kirjoittaa", "soittaa", "tanssia", "kuunnella", "odottaa",
+  "piirtää", "maalata", "opiskella", "auttaa", "haaveilla",
+  "korjata", "tutkia", "pelata", "rakastaa", "sanoa",
+  "keksiä", "suunnitella", "keskustella", "valokuvata", "laulaa",
+  "kerätä", "jakaa", "muistaa", "unohtaa", "leipoa",
+  "ajaa", "rakastella", "tutustua", "hymyillä", "hengittää",
+  "kuvata", "sytyttää", "sammuttaa", "harjoitella", "piiloutua"
+];
+
+const nouns = [
+  "kaupunki", "metsä", "järvi", "vuori", "meri",
+  "tie", "talo", "puisto", "koulu", "juna",
+  "silta", "patsas", "ravintola", "katu", "asema",
+  "tori", "tehdas", "teatteri", "kirjasto", "kahvila",
+  "sairaala", "markkinat", "sauna", "silta", "ratikka",
+  "torni", "järjestö", "koulu", "puu", "vene",
+  "torni", "pyörä", "lampi", "järjestelmä", "ihminen",
+  "koira", "lintu", "juna-asema", "vesitorni", "sähkölaitos",
+  "kauppakeskus", "liikennevalo", "silta", "rakennus", "näkötorni"
+];
+
+const adjectives = [
+  "kaunis", "vanha", "hiljainen", "vilkas", "valoisa",
+  "kylmä", "kuuma", "korkea", "matala", "vihreä",
+  "värikäs", "ystävällinen", "rohkea", "nopea", "hidas",
+  "upea", "erikoinen", "hauska", "ystävällinen", "rauhallinen",
+  "meluisa", "moderni", "historiallinen", "loistava", "lempeä",
+  "tumma", "vaalea", "tuore", "viisas", "rohkea",
+  "luova", "utelia", "kestävä", "vahva", "reilu",
+  "avoin", "sosiaalinen", "energinen", "unelmoiva", "mielikuvituksellinen"
+];
+
+
+    const cards = {
+      verb: document.getElementById("verbCard"),
+      noun: document.getElementById("nounCard"),
+      adj: document.getElementById("adjCard"),
+    };
+
+    const restartBtn = document.getElementById("restartBtn");
+    let clickedCount = 0;
+
+    function randomWord(list) {
+      return list[Math.floor(Math.random() * list.length)];
+    }
+
+    function handleClick(type) {
+      if (cards[type].dataset.clicked === "true") return;
+
+      let word = "";
+      if (type === "verb") word = randomWord(verbs);
+      else if (type === "noun") word = randomWord(nouns);
+      else if (type === "adj") word = randomWord(adjectives);
+
+      cards[type].textContent = word;
+      cards[type].dataset.clicked = "true";
+      clickedCount++;
+
+      if (clickedCount === 3) {
+        restartBtn.style.display = "block";
+      }
+    }
+
+    cards.verb.addEventListener("click", () => handleClick("verb"));
+    cards.noun.addEventListener("click", () => handleClick("noun"));
+    cards.adj.addEventListener("click", () => handleClick("adj"));
+
+    restartBtn.addEventListener("click", () => {
+      Object.values(cards).forEach(card => {
+        card.textContent = card.classList.contains("verb")
+          ? "Verbi"
+          : card.classList.contains("noun")
+          ? "Substantiivi"
+          : "Adjektiivi";
+        card.dataset.clicked = "false";
+      });
+      clickedCount = 0;
+      restartBtn.style.display = "none";
+    });
+  </script>
+</body>
+</html>
